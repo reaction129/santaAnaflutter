@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:santaana/tabs/pedidosTab.dart';
 
 class RegistrarPedido extends StatefulWidget {
   @override
@@ -22,7 +21,7 @@ class _RegistrarPedidoState extends State<RegistrarPedido> {
       "kilos": kilos.text,
       "comentario": comentario.text,
       //la id o algo del cliente logeado();
-      "idCliente": pedidos
+
   });
   }
 

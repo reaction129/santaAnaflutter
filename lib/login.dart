@@ -35,7 +35,7 @@ class loginsantaAna extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/main': (BuildContext context) => new santaAna(rut: rut,),
         '/adminPage': (BuildContext context) => new Admin(),
-        '/clientePage': (BuildContext context) => new Client(),
+        //'/clientePage': (BuildContext context) => new Client(),
         '/despachadorPage': (BuildContext context) => new Despachador(),
         '/loginPage': (BuildContext context) => loginPage(),
         '/tabs/gpscarTab': (BuildContext context) => gpscarTab(),
@@ -82,12 +82,13 @@ class _loginPageState extends State<loginPage> {
     if (datauser.length == 0) {
       setState(() {
         msj = "Login Fail";
+        Navigator.pushReplacementNamed(context, '/loginPage');
       });
     } else {
       if (datauser[0]['perfil'] == 'Administrador') {
         Navigator.pushReplacementNamed(context, '/main');
-      } else if (datauser[0]['nivel'] == 'bodega') {
-//        Navigator.pushReplacementNamed(context, '/bodegaPage');
+      } else if (datauser[0]['perfil'] == 'Cliente') {
+        Navigator.pushReplacementNamed(context, '/pages/clientePage');
       }
 
       setState(() {
