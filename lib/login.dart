@@ -10,18 +10,26 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:santaana/pages/adminPage.dart';
 import 'package:santaana/pages/clientePage.dart';
-import 'package:santaana/pages/despachadorPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:santaana/tabs/gpscarTab.dart';
 import 'package:santaana/tabs/pedidosTab.dart';
 import 'package:santaana/tabs/valoracionesTab.dart';
-
+import 'package:santaana/tabs/enviarValoracion.dart';
 import 'main.dart';
-
+import 'package:santaana/tabs/cambiarPass.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:santaana/pages/repartidorPage.dart';
+import 'package:oktoast/oktoast.dart';
 
 void main() => runApp(loginsantaAna());
 
-String rut;
+String ID;
+String passw;
+String nombre;
+String perfilUser;
+
+
+
 
 
 class loginsantaAna extends StatelessWidget {
@@ -33,17 +41,17 @@ class loginsantaAna extends StatelessWidget {
       title: ('LOGIN'),
       home: new loginPage(),
       routes: <String, WidgetBuilder>{
-        '/main': (BuildContext context) => new santaAna(rut: rut,),
-        '/adminPage': (BuildContext context) => new Admin(),
-        //'/clientePage': (BuildContext context) => new Client(),
-        '/despachadorPage': (BuildContext context) => new Despachador(),
+        '/main': (BuildContext context) => new santaAna(idUsuario: ID, nombreUsuario: nombre, perfil: perfilUser),
+        '/pages/clientePage': (BuildContext context) => new ClientPage(idUsuario: ID, nombreUsuario: nombre, perfil: perfilUser),
         '/loginPage': (BuildContext context) => loginPage(),
         '/tabs/gpscarTab': (BuildContext context) => gpscarTab(),
-        '/tabs/pedidosTab': (BuildContext context) => pedidos(rut: rut,),
-        '/tabs/valoracionesTab': (BuildContext context) => valoracionesTab()
+        '/tabs/pedidosTab': (BuildContext context) => pedidos(),
+        '/tabs/valoracionesTab': (BuildContext context) => ValoracionesTab(),
+        '/tabs/enviarValoracion': (BuildContext context) => enviarValoracion(idUsuario: ID, nombreUsuario: nombre,),
+        '/tabs/details/cambiarPass': (BuildContext context) => CambiarPass(idUsuario: ID, pass: passw, perfil: perfilUser),
+        '/pages/repartidorPage': (BuildContext context) => new RepartidorPage()
 
-      },
-
+}
     );
   }
 }
@@ -59,8 +67,12 @@ class _loginPageState extends State<loginPage> {
 
 
 
+  final globalKey = new GlobalKey();
+  var _formkey = GlobalKey<FormState>();
+
   TextEditingController rutUser = new TextEditingController();
   TextEditingController passUser = new TextEditingController();
+
 
 
 
@@ -68,33 +80,52 @@ class _loginPageState extends State<loginPage> {
 
 
 
-  Future<List> login(BuildContext context) async {
+
+
+  Future <List>login(BuildContext context) async {
+
     final response = await http.post(
-        "http://localhost:8888/santaAnaflutter/login.php",
+        "http://nuestropandecadadia.com/login.php",
         body: {
           'rut': rutUser.text,
-          'pass': passUser.text,
-
+          'pass': passUser.text
         });
+
     var datauser = json.decode(response.body);
     print(datauser);
 
-    if (datauser.length == 0) {
-      setState(() {
-        msj = "Login Fail";
-        Navigator.pushReplacementNamed(context, '/loginPage');
+    try{
+      setState((){
+        ID = datauser[0]['idUsuario'];
+        nombre = datauser[0]['nombre'];
       });
+    }catch (e){
+      String ans = "Error ingrese datos validos";
+      print(ans);
+
+    }
+
+    if (datauser.length == 0) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => new loginPage()
+        ));
+
     } else {
       if (datauser[0]['perfil'] == 'Administrador') {
-        Navigator.pushReplacementNamed(context, '/main');
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => new santaAna(idUsuario: ID, nombreUsuario: nombre, perfil: perfilUser)
+        ));
       } else if (datauser[0]['perfil'] == 'Cliente') {
-        Navigator.pushReplacementNamed(context, '/pages/clientePage');
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => new ClientPage(idUsuario: ID, nombreUsuario: nombre, perfil: perfilUser)
+        ));
+      }else if (datauser[0]['perfil'] == 'Repartidor'){
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => new RepartidorPage(idUsuario: ID, nombreUsuario: nombre)
+        ));
       }
 
-      setState(() {
-        rut = datauser[0]['rut'];
-      });
-    }
+         }
 
     return datauser;
   }
@@ -103,7 +134,6 @@ class _loginPageState extends State<loginPage> {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
-
         resizeToAvoidBottomPadding: false,
         body: Form(
           child: Container(
@@ -200,31 +230,18 @@ class _loginPageState extends State<loginPage> {
                         ),
 
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 6,
-                            right: 32,
-                          ),
-                          child: Text(
-                            'Recordar contraseña',
-                            style: TextStyle(
-                                color: Colors.grey
-                            ),
-                          ),
-                        ),
-                      ),
-                      Spacer(),
                       new RaisedButton(
+
                         child: new Text('ENTRAR'),
                         color: Colors.orange,
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           login(context);
-                          Navigator.pop(context);
+                          Navigator.push(context, new MaterialPageRoute(
+                              builder: (context) => new loginsantaAna()
+                          ));
                         },
                       ),
                       Text(msj,

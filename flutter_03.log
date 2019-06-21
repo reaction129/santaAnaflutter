@@ -1,0 +1,97 @@
+Flutter crash report; please file at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter --no-color packages upgrade
+
+## exception
+
+NoSuchMethodError: NoSuchMethodError: The method '[]' was called on null.
+Receiver: null
+Tried calling: []("androidPackage")
+
+```
+#0      Object.noSuchMethod (dart:core-patch/object_patch.dart:50:5)
+#1      _validateFlutter (package:flutter_tools/src/flutter_manifest.dart:372:22)
+#2      _validate (package:flutter_tools/src/flutter_manifest.dart:312:9)
+<asynchronous suspension>
+#3      FlutterManifest._createFromYaml (package:flutter_tools/src/flutter_manifest.dart:45:40)
+<asynchronous suspension>
+#4      FlutterManifest.createFromString (package:flutter_tools/src/flutter_manifest.dart:40:12)
+<asynchronous suspension>
+#5      FlutterManifest.createFromPath (package:flutter_tools/src/flutter_manifest.dart:34:12)
+<asynchronous suspension>
+#6      FlutterProject._readManifest (package:flutter_tools/src/project.dart:153:60)
+<asynchronous suspension>
+#7      FlutterProject.fromDirectory (package:flutter_tools/src/project.dart:44:44)
+<asynchronous suspension>
+#8      FlutterProject.fromPath (package:flutter_tools/src/project.dart:59:58)
+#9      PackagesGetCommand.runCommand (package:flutter_tools/src/commands/packages.dart:96:61)
+<asynchronous suspension>
+#10     FlutterCommand.verifyThenRunCommand (package:flutter_tools/src/runner/flutter_command.dart:559:18)
+#11     _asyncThenWrapperHelper.<anonymous closure> (dart:async-patch/async_patch.dart:77:64)
+#12     _rootRunUnary (dart:async/zone.dart:1132:38)
+#13     _CustomZone.runUnary (dart:async/zone.dart:1029:19)
+#14     _FutureListener.handleValue (dart:async/future_impl.dart:126:18)
+#15     Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:639:45)
+#16     Future._propagateToListeners (dart:async/future_impl.dart:668:32)
+#17     Future._complete (dart:async/future_impl.dart:473:7)
+#18     _SyncCompleter.complete (dart:async/future_impl.dart:51:12)
+#19     _AsyncAwaitCompleter.complete.<anonymous closure> (dart:async-patch/async_patch.dart:33:20)
+#20     _rootRun (dart:async/zone.dart:1124:13)
+#21     _CustomZone.run (dart:async/zone.dart:1021:19)
+#22     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:947:23)
+#23     _microtaskLoop (dart:async/schedule_microtask.dart:41:21)
+#24     _startMicrotaskLoop (dart:async/schedule_microtask.dart:50:5)
+#25     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:115:13)
+#26     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:172:5)
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel beta, v1.5.4-hotfix.2, on Mac OS X 10.14.3 18D109, locale es-CL)
+    • Flutter version 1.5.4-hotfix.2 at /Users/Cristobal/Desktop/Downloads/flutter
+    • Framework revision 7a4c33425d (6 weeks ago), 2019-04-29 11:05:24 -0700
+    • Engine revision 52c7a1e849
+    • Dart version 2.3.0 (build 2.3.0-dev.0.5 a1668566e5)
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 28.0.3)
+    • Android SDK at /Users/Cristobal/Library/Android/sdk
+    • Android NDK location not configured (optional; useful for native profiling support)
+    • Platform android-28, build-tools 28.0.3
+    • Java binary at: /Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/bin/java
+    • Java version Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+    • All Android licenses accepted.
+
+[!] iOS toolchain - develop for iOS devices (Xcode 10.2.1)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Xcode 10.2.1, Build version 10E1001
+    ✗ Verify that all connected devices have been paired with this computer in Xcode.
+      If all devices have been paired, libimobiledevice and ideviceinstaller may require updating.
+      To update with Brew, run:
+        brew update
+        brew uninstall --ignore-dependencies libimobiledevice
+        brew uninstall --ignore-dependencies usbmuxd
+        brew install --HEAD usbmuxd
+        brew unlink usbmuxd
+        brew link usbmuxd
+        brew install --HEAD libimobiledevice
+        brew install ideviceinstaller
+    • ios-deploy 1.9.4
+    • CocoaPods version 1.7.1
+
+[!] Android Studio (not installed)
+    • Android Studio not found; download from https://developer.android.com/studio/index.html
+      (or visit https://flutter.dev/setup/#android-setup for detailed instructions).
+
+[✓] IntelliJ IDEA Community Edition (version 2019.1.1)
+    • IntelliJ at /Applications/IntelliJ IDEA CE.app
+    • Flutter plugin version 35.2.3
+    • Dart plugin version 191.7019
+
+[✓] Connected device (1 available)
+    • iPhone Xʀ • FFCB9D2E-3268-475D-98A1-C4D589D52C6E • ios • com.apple.CoreSimulator.SimRuntime.iOS-12-2 (simulator)
+
+! Doctor found issues in 2 categories.
+```

@@ -19,7 +19,7 @@ class _editPedidoState extends State<editPedido> {
 
 
   void editPedido(){
-    var url = "http://localhost:8888/santaAnaflutter/editPedido.php";
+    var url = "http://nuestropandecadadia.com/editPedido.php";
         http.post(url, body: {
           'idPedido': widget.list[widget.index]['idPedido'],
           'kilos': kilos.text,

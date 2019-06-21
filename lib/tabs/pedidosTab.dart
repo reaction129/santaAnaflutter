@@ -4,23 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:santaana/tabs/details/registrarPedido.dart';
 import 'dart:async';
-
+import 'package:dio/dio.dart';
 import 'details/detailPedido.dart';
 
 
 class pedidos extends StatefulWidget {
 
-  pedidos({this.rut});
-  final String rut;
+
+
   @override
   _pedidosState createState() => _pedidosState();
 }
 
 class _pedidosState extends State<pedidos> {
 
-  Future<List> getDatapedidos() async{
-    final response = await http.get("http://localhost:8888/santaAnaflutter/getPedido.php");
-    return json.decode((response.body));
+ Dio dio = new Dio();
+ Response response;
+
+  Future<List> getPedidos()async{
+    var url= 'http://nuestropandecadadia.com/getPedido.php';
+    try{
+      response = await dio.get(url);
+      return json.decode((response.data));
+
+    }catch (e){
+      print(e.toString());
+    }
   }
 
 
@@ -32,16 +41,8 @@ class _pedidosState extends State<pedidos> {
       appBar: AppBar(
         title: new Text("Listado de pedidos"),
       ),
-      floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add),
-        onPressed: (){
-          Navigator.of(context).push(new MaterialPageRoute(
-            builder: (BuildContext context) => new RegistrarPedido(),
-          ));
-          },
-      ),
       body: new FutureBuilder<List>(
-        future: getDatapedidos(),
+        future: getPedidos(),
         builder: (context, snapshot){
           if(snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
@@ -80,12 +81,12 @@ class pedidosList extends StatelessWidget {
             child: new Card(
               child: new ListTile(
                 title: new Text(
-                  list[i]['idPedido'],
+                  list[i]['nombreUsuario'],
                   style: TextStyle(fontSize: 25.0, color: Colors.orangeAccent),
                 ),
                 leading: new Icon(
                   Icons.assignment_late,
-                  size: 77.0,
+                  size: 45.0,
                   color: Colors.orangeAccent,
                 ),
                 subtitle: new Text(

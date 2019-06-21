@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1020"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1325F9A99E44F952050A118BE8359F38"
+               BlueprintIdentifier = "1D58B7172DB6F39EB89D1F5B085EB001"
                BuildableName = "libgoogle_maps_flutter.a"
                BlueprintName = "google_maps_flutter"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -1,32 +1,55 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:santaana/pages/clientePage.dart';
 
 class RegistrarPedido extends StatefulWidget {
+
+  var idUsuario;
+  var nombreUsuario;
+  RegistrarPedido({this.idUsuario, this.nombreUsuario});
+
   @override
   _RegistrarPedidoState createState() => _RegistrarPedidoState();
 }
 
 class _RegistrarPedidoState extends State<RegistrarPedido> {
+
+
   TextEditingController kilos = new TextEditingController();
   TextEditingController comentario = new TextEditingController();
 
-  //aqui hay q capturar el nombre o la id del cliente logeado();
 
   var _formkey = GlobalKey<FormState>();
 
-  void addnewPedido(){
-    var url = "http://localhost:8889/santaAnaflutter/addpedido.php";
+  Future addnewPedido() async{
 
-    http.post(url, body: {
+    var response;
+    Dio dio = new Dio();
+    var url = "http://nuestropandecadadia.com/addpedido.php";
+    FormData formData = new FormData.from({
       "kilos": kilos.text,
       "comentario": comentario.text,
-      //la id o algo del cliente logeado();
+      "idUsuario": widget.idUsuario,
+      "nombreUsuario": widget.nombreUsuario
+    });
 
-  });
+    try{
+      response = await dio.post(url, data: formData);
+    } catch (e){
+      print('a');
+      print(e.toString());
+    }
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: new Text("Crear Nuevo Pedido"),
@@ -43,8 +66,10 @@ class _RegistrarPedidoState extends State<RegistrarPedido> {
                     leading: const Icon(Icons.assignment_late , color: Colors.black,),
                     title: new TextFormField(
                       controller: kilos,
-                      validator: (value){
-                        if(value.isEmpty) return "Ingrese kilos";
+                      validator: (String value){
+                        if(value.isEmpty){
+                          return "Ingrese kilos";
+                        }
                       },
                       decoration: new InputDecoration(
                         hintText: "Kilos", labelText: "Kilos",
@@ -55,8 +80,10 @@ class _RegistrarPedidoState extends State<RegistrarPedido> {
                     leading: const Icon(Icons.comment , color: Colors.black,),
                     title: new TextFormField(
                       controller: comentario,
-                      validator: (value){
-                        if(value.isEmpty) return "Ingrese comentario";
+                      validator: (String value){
+                        if(value.isEmpty){
+                          return "Ingrese comentario";
+                        }
                       },
                       decoration: new InputDecoration(
                         hintText: "Comentario", labelText: "Comentario",
@@ -70,13 +97,19 @@ class _RegistrarPedidoState extends State<RegistrarPedido> {
                     padding: const EdgeInsets.all(10.0),
                   ),
                   new RaisedButton(
-                    child: new Text("Guardar Cambios"),
-                    color: Colors.black,
+                    child: new Text("Solicitar Pan"),
+                    color: Colors.orange,
                     shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)
                     ),
                     onPressed: (){
-                      Navigator.pushReplacementNamed(context, '/pedidosTab');
+                      setState(() {
+                        if(_formkey.currentState.validate()){
+                          addnewPedido();
+                          kilos.clear();
+                          comentario.clear();
+                        }
+                      });
                     },
                   )
                 ],
